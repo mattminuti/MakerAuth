@@ -12,6 +12,9 @@ Here is a small shell script that sets up said variables
     SESSION_SECRET="putyoursupperawesomesecretrighthere"
     export SESSION_SECRET
 
+    MONGODB_URI="mongodb://localhost.makerauth"
+    export MONGODB_URI
+
     # For current test code
     TESTUSER="yourcardNumber"
     export TESTUSER

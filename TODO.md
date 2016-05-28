@@ -2,14 +2,14 @@
 
 Arduino code:
 
--   [ ] Read wifi configuration from SPIFFS file
--   [ ] Read config for what server to talk to from SPIFFS file
--   [ ] Maybe read how long to be open for from file? Or from server response?
+- [ ] Read wifi configuration from SPIFFS file
+- [ ] Read config for what server to talk to from SPIFFS file
+- [ ] Maybe read how long to be open for from file? Or from server response?
 
 Server code:
 
 - [x] catch an access attempt
-- [ ] handle an access attepmt (server gives esp signal to fire latch, was this done with res.send()?)  
+- [x] handle an access attepmt
 - [ ] schema for data storage
 - [ ] handle registration a card to the database
 - [ ] handle access attempt against database entry
@@ -22,8 +22,8 @@ Client side: ( think mobile first, cordova has an nfc plug-in that would make ca
 
 Hardware:
 
--  [ ] Update board to use better microUSB plug
- - [ ] Maybe change LED header to one of the plugs used on the liquidpixels bezel cable, since those worked well.
+- [ ] Update board to use better microUSB plug
+- [ ] Maybe change LED header to one of the plugs used on the liquidpixels bezel cable, since those worked well.
 
 
 ---
