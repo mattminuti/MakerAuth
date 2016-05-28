@@ -1,4 +1,4 @@
-// accessBot.js ~ Copyright 2016 Manchester Makerspace ~ Licence MIT
+// accessBot.js ~ Copyright 2016 Manchester Makerspace ~ License MIT
 /*
  * General URL structure:
  * /machineid/card [?supervising=]
@@ -14,6 +14,21 @@
  * ^ Mysql suggestion, Paul knows mongo, mongo is not perfect, it is good enough
  * we will use mongo unless someone makes a pull request before Paul  :-) 
  */
+ 
+var mongo = { // depends on: mongoose
+    ose: require('mongoose'),
+    init: function(){
+        mongo.ose.connect(process.env.MONGODB_URI);                                  // connect to our database
+        var Schema = mongo.ose.Schema; var ObjectId = Schema.ObjectId;
+        mongo.member = mongo.ose.model('member', new Schema({                         // create user object property
+            id: ObjectId,                                                             // unique id of document
+            fullname: { type: String, required: '{PATH} is required', unique: true }, // full name of user
+            cardID: { type: String, required: '{PATH} is required' },                 // user card id
+            accountType: {type: String},                                              // type of account, admin, mod, ect
+            accesspoints: [String],                                                   // points of access member (door, machine, ect)
+        }));
+    }
+}
 
 var routes = { // singlton for adressing express route request
     wild: function(req, res){  // when random routes are called
@@ -24,18 +39,19 @@ var routes = { // singlton for adressing express route request
         // opts = req.query <- from original code: what options should we expect?
         if(req.params.card === process.env.TESTUSER){
             console.log("Member trying to access " + req.params.machine);
-            res.send("Member trying to access " + req.params.machine);
+            res.status(200).send("Make!");
         }
         else if(req.params.card === process.env.LESSERUSER){
             console.log("less privilaged trying to access " + req.params.machine);
-            res.send("less privilaged trying to access " + req.params.machine);
+            res.status(200).send('Supervisor');
         } else {
             console.log('No go, bro! Get of my lawn');
-            res.send('No go, bro! Get of my lawn');
+            res.status(403).send('No go, bro.');
         }
     },
     admin: function(req, res){    // when '/admin' is called
-        res.send('this will be an admin page that will be logged into');
+        res.send('admin will use this page to register users');
+        // response page will have a socket lister on it that we ping on "no go cases" for that credential to be registered
     },
     register: function(req, res){ // default route
         res.send('members will register their cards here')
@@ -76,4 +92,5 @@ var serve = {                                                // singlton for ser
     }
 }
 
+//mongo.init();    // conect to our mongo server
 serve.theSite(); // Initiate site!
