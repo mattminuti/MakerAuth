@@ -24,7 +24,8 @@
     "compression": "^1.6.2",
     "csurf": "^1.8.3",
     "express": "^4.13.4",
-    "mongoose": "^4.4.19"
+    "mongoose": "^4.4.19",
+    "socket.io": "^1.4.6"
   },
   "engines": {
     "node": "4.2.4",
