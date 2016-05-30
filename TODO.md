@@ -14,7 +14,7 @@ Access point Firmware / Arduino code:
 - [ ] Read wifi configuration from SPIFFS file (optimization)
 - [ ] Read config for what server to talk to from SPIFFS file (optimization)
 - [ ] Maybe read how long to be open for from file? Or from server response?
-- [ ] bcrypt hash cardID? (is this possible on esp8266?)  
+- [ ] bcrypt hash cardID and MachineID? (is this possible on esp8266?)
 - [ ] test using websockets or mqtt for access point to access server communication (optimization)
 - [ ] remove serial debuging messages (optimization)
 - [ ] use setTimeout instead of delay (optimization) https://github.com/PaulBeaudet/ravebot2000/blob/master/timer.ino
@@ -28,6 +28,10 @@ Access Server code:
 - [x] handle access attempt against database entry
 - [ ] handle access attempt against hashed card ID (case of smartphones that data should be private to user in DB)
 - [ ] handle admin access againts hashed password
+- [ ] push notify failed access atempts (optimization)
+- [ ] Store machineIDs hashes in a db collection (or just ids in plain text)
+- [ ] handle request against machineID db entries
+- [ ] TLS? (optimization)
 
 Interface / Client side: ( cordova has an nfc plug-in that would make card registration much easier in future)
 
@@ -36,6 +40,7 @@ Interface / Client side: ( cordova has an nfc plug-in that would make card regis
 - [ ] admin: show activity (optimization)
 - [ ] put up an actual barier to admin page
 - [ ] cordova admin app (optimization)
+- [ ] pass push notificationID to server (optimization)
 
 Physical Access point / Hardware:
 
@@ -76,8 +81,8 @@ Design suggestions
 
 just to get started!
 
-- [x] node to esp communication is REST
-- [ ] registration will be done by passing a socket event to admin client of an invalid nfc entry, admin will manually enter member data 
-- [ ] members will be registered in mongo
-- [ ] we will only install on one door
-- [ ] server will be in the wild (heroku to test from home, raspi on-site when operational)
+- [x] REST node to esp communication
+- [x] registration will be done by passing a socket event to admin client of an invalid nfc entry, admin will manually enter member data 
+- [x] members will be registered in mongo
+- [ ] will install on one door
+- [x] server will be in the wild (heroku to test from home, raspi on-site when operational)

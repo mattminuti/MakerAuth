@@ -36,23 +36,10 @@ var routes = {                 // singlton for adressing express route request: 
         console.log('got request at' + req.url);
         res.status(404).send('this is not the bot you are looking for');
     },
-    testAuth: function(req, res){  // when two params are provided in route /:machine/:card]
-        if(req.params.card === process.env.TESTUSER){
-            console.log("Member trying to access " + req.params.machine);
-            res.status(200).send("Make!");
-        }
-        else if(req.params.card === process.env.LESSERUSER){
-            console.log("less privilaged trying to access " + req.params.machine);
-            res.status(200).send('Supervisor');
-        } else {                                                                    // request authentication rights case
-            console.log('No go, bro! Get of my lawn');
-            res.status(403).send('No go, bro.');
-        }
-    },
     auth: function(req, res){
         mongo.member.findOne({cardID: req.params.card}, function(err, member){     // search for this card in db, when found...
             if(member){                                                            // given this card holder is a registered member
-                var privilaged = member.accesspoints.indexof(req.prams.machine);   // is this machine in privilage list
+                var privilaged = member.accesspoints.indexOf(req.params.machine);  // is this machine in privilage list
                 if(privilaged > -1){ res.status(200).send("Make!");}               // yes: grant access
                 else {res.status(200).send("rejected");}                           // no:  reject access
             } else {                                                               // No member found case, assume registerering
