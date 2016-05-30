@@ -1,26 +1,43 @@
 ### Todo list
 
-Arduino code:
+Save anything thing labled (optimization) for after MVP ~ minimal viable product
 
-- [ ] Read wifi configuration from SPIFFS file
-- [ ] Read config for what server to talk to from SPIFFS file
+System design decisions:
+
+- [ ] when or how machines will "close" access (suggestion: if member checks in, they are responsible to check out)
+- [ ] What is most practical way to register users (suggestion: android app)
+- [ ] what protocol should be ultimately used for Machine to Machine (mqtt, websockets, curl) (optimization)
+- [ ] what database to ultimately use (mongo, mysql, ldap) (optimization)
+
+Access point Firmware / Arduino code:
+
+- [ ] Read wifi configuration from SPIFFS file (optimization)
+- [ ] Read config for what server to talk to from SPIFFS file (optimization)
 - [ ] Maybe read how long to be open for from file? Or from server response?
+- [ ] bcrypt hash cardID? (is this possible on esp8266?)  
+- [ ] test using websockets or mqtt for access point to access server communication (optimization)
+- [ ] remove serial debuging messages (optimization)
+- [ ] use setTimeout instead of delay (optimization) https://github.com/PaulBeaudet/ravebot2000/blob/master/timer.ino
 
-Server code:
+Access Server code:
 
 - [x] catch an access attempt
 - [x] handle an access attepmt
-- [ ] schema for data storage
-- [ ] handle registration a card to the database
-- [ ] handle access attempt against database entry
+- [x] schema for data storage
+- [x] handle registration a card to the database
+- [x] handle access attempt against database entry
+- [ ] handle access attempt against hashed card ID (case of smartphones that data should be private to user in DB)
+- [ ] handle admin access againts hashed password
 
-Client side: ( think mobile first, cordova has an nfc plug-in that would make card registration much easier, long run)
+Interface / Client side: ( cordova has an nfc plug-in that would make card registration much easier in future)
 
-- [ ] manual admin regerstration page (revoke/add access)
-- [ ] admin dashboard (show activity: low priority )
-- [ ] easy regerstration page (low priority)
+- [x] admin: add access
+- [ ] admin: revoke access
+- [ ] admin: show activity (optimization)
+- [ ] put up an actual barier to admin page
+- [ ] cordova admin app (optimization)
 
-Hardware:
+Physical Access point / Hardware:
 
 - [ ] Update board to use better microUSB plug
 - [ ] Maybe change LED header to one of the plugs used on the liquidpixels bezel cable, since those worked well.
