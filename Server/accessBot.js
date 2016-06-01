@@ -55,10 +55,10 @@ var mongo = { // depends on: mongoose
     }
 }
 
-var expired = {
+var expired = {                                         // determine member expirations
     byMonths: function(startTime, duration){
-        var currentDate = new Date().getTime();
-        var startDate = new Date(startTime).getTime();  // TODO check professional way to address month figure
+        var currentDate = new Date().getTime();         // current millis from 1970
+        var startDate = new Date(startTime).getTime();  // registration time millis from 1970 TODO check professional way to address month figure
         var monthsElapsed = (currentDate - startDate) / 1000 / 60 / 60 / 60 / 24 / 30; // figure months elapsed
         console.log('duration:'+ duration + '-months elapsed:' + monthsElapsed);       // DEBUG TODO remove
         if(monthsElapsed > duration){
