@@ -9,7 +9,7 @@
 var mongo = { // depends on: mongoose
     ose: require('mongoose'),
     init: function(){
-        mongo.ose.connect(process.env.MONGODB_URI);                                  // connect to our database
+        mongo.ose.connect(process.env.MONGODB_URI);                                   // connect to our database
         var Schema = mongo.ose.Schema; var ObjectId = Schema.ObjectId;
         mongo.member = mongo.ose.model('member', new Schema({                         // create user object property
             id: ObjectId,                                                             // unique id of document
@@ -17,7 +17,35 @@ var mongo = { // depends on: mongoose
             cardID: { type: String, required: '{PATH} is required', unique: true },   // user card id
             accountType: {type: String},                                              // type of account, admin, mod, ect
             accesspoints: [String],                                                   // points of access member (door, machine, ect)
+            expiration: {type: String},                                               // when membership auto revokes
         }));
+        mongo.bot = mongo.ose.model('bot', new Schema({
+            id: ObjectId,
+            machineID: {type: String, required: '{PATH} is required', unique: true},  // unique identifier of point of access
+            botName: {type: String, required: '{PATH} is required', unique: true},    // human given name for point of access
+            botType: {type: String, required: '{PATH} is required'},                  // type (door, tool, kegerator, ect)
+        }));
+    },
+    auth: function(machine, card, successCallback, failCallback){                     // database calls to authenticate
+        mongo.bot.findOne({machineID: machine}, function(error, realBot){             // one call for machine authenticity
+            if(error){
+                failCallback('finding bot:' + error);
+            } else if(realBot){
+                mongo.member.findOne({cardID: card}, function(err, member){            // one call for member authenticity
+                    if(err){
+                        failCallback('finding member:' + error);
+                    } else if (member && member.accesspoints.indexOf(machine) > -1){
+                        successCallback(member);
+                    } else {                                                           // if no access or no access to specific machine
+                        sockets.io.emit('register', {cardID: card, machine: machine}); // send socket emit to potential admin
+                        failCallback('not a member');                                  // given them proper credentials to put in db
+                    }
+                });
+            } else {
+                sockets.io.emit('newbot', machine);                                     // signal an interface prompt for registering bots
+                failCallback('not a bot');
+            }
+        });
     }
 }
 
@@ -31,41 +59,46 @@ var sockets = {
     }
 }
 
-var routes = {                 // singlton for adressing express route request: depends on mongo and sockets 
+var routes = {                 // singlton for adressing express route request: depends on mongo
     wild: function(req, res){  // when random routes are called
         console.log('got request at' + req.url);
         res.status(404).send('this is not the bot you are looking for');
     },
     auth: function(req, res){
-        mongo.member.findOne({cardID: req.params.card}, function(err, member){     // search for this card in db, when found...
-            if(member){                                                            // given this card holder is a registered member
-                var privilaged = member.accesspoints.indexOf(req.params.machine);  // is this machine in privilage list
-                if(privilaged > -1){ res.status(200).send("Make!");}               // yes: grant access
-                else {res.status(200).send("rejected");}                           // no:  reject access
-            } else {                                                               // No member found case, assume registerering
-                sockets.io.emit('register', { cardID: req.params.card,             // send socket emit to potential admin
-                                              machine: req.params.machine});       // given them proper credentials to put in db
-                res.status(403).send("try again once registered");                 // send potentially temp rejection
-            }
-        });
+        mongo.auth( req.params.machine,                                            // pass machine information
+                    req.params.card,                                               // pass card information
+                    function(){res.status(200).send('Make!');},                    // success case callback
+                    function(msg){res.status(403).send(msg);});                    // fail case callback (custom message reasons)
     },
     signup: function(req, res){            // default route
         res.sendFile(__dirname + "/views/register.html");     // TODO: figure out {csrfToken: req.csrfToken()} w/out jade
     },
     register: function(req, res){                                     // registration post
-        if(req.body.cardID && req.body.machine && req.body.fullname){ // expect minimal critiria to save a new member
-            var member = new mongo.member({                           // create a new member
-                fullname: req.body.fullname,
-                cardID: req.body.cardID,
-                acountType: req.body.accountType,
-                accesspoints: [req.body.machine]
-            });
-            member.save(function(error){                              // save method of member scheme: write to mongo!
-                if(error){res.send('member failed to save');}
-                else{res.send('save success');}
-            });
-        } else {
-            res.send("you did it wrong, reload and try again");
+        if(req.body.type === 'member'){
+            if(req.body.cardID && req.body.machine && req.body.fullname){ // expect minimal critiria to save a new member
+                var member = new mongo.member({                           // create a new member
+                    fullname: req.body.fullname,
+                    cardID: req.body.cardID,
+                    acountType: req.body.accountType,
+                    accesspoints: [req.body.machine]
+                });
+                member.save(function(error){                              // save method of member scheme: write to mongo!
+                    if(error){res.send('member failed to save');}
+                    else{res.send('save success');}
+                });
+            } else { res.send("did it wrong, reload and try again");}
+        } else if (req.body.type === 'bot'){
+            if(req.body.machine && req.body.fullname && req.body.accountType){
+                var bot = new mongo.bot({
+                    machineID: req.body.machine,
+                    botName: req.body.fullname,
+                    botType: req.body.accountType
+                });
+                bot.save(function(err){
+                    if(err){res.send('access point save failed');}
+                    else{res.send('save succes');}
+                });
+            } else { res.send("did it wrong, reload and try again");}
         }
     }
 }

@@ -15,12 +15,6 @@ Here is a small shell script that sets up said variables
     MONGODB_URI="mongodb://localhost.makerauth"
     export MONGODB_URI
 
-    # For current test code
-    TESTUSER="yourcardNumber"
-    export TESTUSER
-    LESSERUSER="yourOtherNFCthingNumber"
-    export LESSERUSER
-
     echo "Starting the accessBot!"
     # nodemon accessBot.js # reloads server on source change -> sudo npm install -g nodemon
     node accessBot.js
