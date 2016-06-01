@@ -20,16 +20,21 @@
             <div id="signup" class="jumbotron">
                 <h1 id="indicator"> Scan New ...</h1>
                 <p> Unregistered Member or Point of Access</p>
+                <!-- TODO Would probably benifit from being seperate forms, create bot registration seprerately -->
                 <form method="post">
                     <input type="hidden", name="cardID"/>
                     <input type="hidden", name="machine"/>
                     <input type="hidden", name="type"/>
                     <div class="form-group">
-                        <label for="fullname"> Fullname or point of acccess name </label>
+                        <label id="nameField" for="fullname"> Fullname </label>
                         <input class="form-control" type="text" name="fullname" required="true"/>
                     </div>
+                    <div id="monthsField" class="form-group">
+                        <label for="fullname"> Renewal amount in months </label>
+                        <input class="form-control" type="number" name="months" min="1" max="12"/>
+                    </div>
                     <div class="form-group">
-                        <label for="acountType"> Member or Access type </label>
+                        <label id="accountField" for="acountType"> Member type </label>
                         <input class="form-control" type="text" name="accountType"/>
                     </div>
                     <input id="submit" class="btn btn-success btn-lg" type="submit", value="register"/>
