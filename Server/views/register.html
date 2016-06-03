@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+    register.html ~ Copyright 2016 Manchester Makerspace ~ License MIT
+    Register users into our access control system 
+-->
+<html>
+    <head>
+        <link rel='stylesheet'
+              href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'
+              integrity='sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7'
+              crossorigin='anonymous'>
+        <link rel='stylesheet'
+              href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css'
+              integrity='sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r'
+              crossorigin='anonymous'>
+        <title>Registration</title>
+    </head>
+    <body>
+        <div class="app container">
+            <div id="signup" class="jumbotron">
+                <h1 id="indicator"> Scan New ...</h1>
+                <p> Unregistered Member or Point of Access</p>
+                <!-- TODO Would probably benifit from being seperate forms, create bot registration seprerately -->
+                <form method="post">
+                    <input type="hidden", name="cardID"/>
+                    <input type="hidden", name="machine"/>
+                    <input type="hidden", name="type"/>
+                    <div class="form-group">
+                        <label id="nameField" for="fullname"> Fullname </label>
+                        <input class="form-control" type="text" name="fullname" required="true"/>
+                    </div>
+                    <div id="monthsField" class="form-group">
+                        <label for="fullname"> Renewal amount in months </label>
+                        <input class="form-control" type="number" name="months" min="1" max="12"/>
+                    </div>
+                    <div class="form-group">
+                        <label id="accountField" for="acountType"> Member type </label>
+                        <input class="form-control" type="text" name="accountType"/>
+                    </div>
+                    <input id="submit" class="btn btn-success btn-lg" type="submit", value="register"/>
+                </form>
+            </div>
+        </div>
+        <!--<script type="text/javascript" src="cordova.js"></script> -->
+        <script type="text/javascript" 
+                src='https://code.jquery.com/jquery-2.2.4.min.js' 
+                integrity='sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44='
+                crossorigin="anonymous"></script>
+        <script type="text/javascript"
+                src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'
+                integrity='sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS'
+                crossorigin="anonymous"></script>
+        <script type="text/javascript" src="js/socketio145.js"></script>
+        <script type="text/javascript" src="js/register.js"></script>
+    </body>
+</html>

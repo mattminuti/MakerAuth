@@ -1,0 +1,7 @@
+# Our source control ignorances
+
+# libraries for node.js
+Server/node_modules
+
+# our server start script with all of our super secret enviornment variables
+Server/start.sh

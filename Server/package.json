@@ -1,0 +1,34 @@
+{
+  "name": "accessbot",
+  "version": "1.0.0",
+  "description": "This is a server for an access control system",
+  "main": "accessBot.js",
+  "scripts": {
+    "test": "nodemon accessBot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattminuti/MakerAuth.git"
+  },
+  "author": "Manchester Makerspace",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattminuti/MakerAuth/issues"
+  },
+  "homepage": "https://github.com/mattminuti/MakerAuth#readme",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "body-parser": "^1.15.1",
+    "client-sessions": "^0.7.0",
+    "compression": "^1.6.2",
+    "csurf": "^1.8.3",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.19",
+    "socket.io": "^1.4.6"
+  },
+  "engines": {
+    "node": "4.2.4",
+    "npm": "2.14.12"
+  }
+}

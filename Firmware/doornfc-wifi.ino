@@ -18,7 +18,7 @@
 #define DEBUG_MODE
 
 
-const char* AuthServer = "192.168.1.101";
+const char* AuthServer = "http://manchmakerspace.herokuapp.com";
 IPAddress dns(8, 8, 8, 8);
 const bool ImmaDoor = 1;
 const bool ImmaMachine = 0;
